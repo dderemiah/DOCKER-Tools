@@ -1,38 +1,34 @@
 version: '3.7'
 services:
-  
+
   devops:
-   container_name: vpackets-tools
+   container_name: vpackets-tools2
    build: .
    tty: true
    restart: always
-   volumes: 
-    - /Users/nic/code/:/home/nic/code/
-    - /Users/nic/Code/DOCKER - Tools/Ansible/Ansible_variables:/home/nic/ansible
+   volumes:
+    - /Users/danield/git_projects:/home/danield/code/
+    - /Users/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables:/home/danield/ansible
    hostname: vpackets-tools
-    
-  nginx:
-    container_name: vpackets-nginx
-    image: nginx:latest
-    tty: true
-    restart: always
-    volumes:
-      - /Users/nic/code/DOCKER - Tools/www:/usr/share/nginx/html
-    ports: 
-      - "8080:80"
+  #
+  # nginx:
+  #   container_name: vpackets-nginx
+  #   image: nginx:latest
+  #   tty: true
+  #   restart: always
+  #   volumes:
+  #     - /Users/danield/git_projects/DOCKER-Tools/www:/usr/share/nginx/html
+  #   ports:
+  #     - "8080:80"
 
-  sftp:
-    container_name: vpackets-sftp
-    image: atmoz/sftp
-    tty: true
-    restart: always
-    volumes:
-      - /Users/nic/code/DOCKER - Tools/sftp:/home/nic/sftp
-      - /Users/nic/.ssh/id_rsa.pub:/home/nic/.ssh/keys/id_rsa.pub
-    ports:
-        - "2222:22"
-    command: nic:password:1001
-
-
-
-    
+  # sftp:
+  #   container_name: vpackets-sftp
+  #   image: atmoz/sftp
+  #   tty: true
+  #   restart: always
+  #   volumes:
+  #     - /Users/danield/git_projects/DOCKER-Tools/sftp:/home/danield/sftp
+  #     - /Users/danield/.ssh/id_rsa.pub:/home/danield/.ssh/keys/id_rsa.pub
+  #   ports:
+  #       - "2222:22"
+  #   command: danield:password:1001

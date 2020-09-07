@@ -9,15 +9,15 @@ ENV TERRAFORM_VERSION "0.12.29"
 ENV POWERSHELL_VERSION "7.0.3"
 
 # Creating Home Directory
-WORKDIR /home/nmichel
-RUN mkdir -p /home/nmichel/ansible
-RUN mkdir -p /home/nmichel/code
-RUN mkdir -p /home/nmichel/lab-images
+WORKDIR /home/danield
+RUN mkdir -p /home/danield/ansible
+RUN mkdir -p /home/danield/code
+RUN mkdir -p /home/danield/lab-images
 
 # Copy requirement file (PIP Libraries)
-COPY requirements.txt /home/nmichel/requirements.txt
+COPY requirements.txt /home/danield/requirements.txt
 
-# Copy Ansible Config 
+# Copy Ansible Config
 COPY Ansible/ansible.cfg /etc/ansible/ansible.cfg
 
 # Fix bad proxy issue
@@ -37,13 +37,13 @@ RUN  apt-get -y update && \
   dnsutils \
   fping \
   git \
-  hping3 \ 
+  hping3 \
   htop \
   httpie \
   iftop \
   # need to expose Port
   iperf \
-  iperf3 \ 
+  iperf3 \
   iproute2 \
   iputils-arping \
   iputils-clockdiff \
@@ -51,7 +51,7 @@ RUN  apt-get -y update && \
   iputils-tracepath \
   libfontconfig \
   liblttng-ust0 \
-  man \ 
+  man \
   mtr \
   mysql-client \
   mysql-server \
@@ -77,7 +77,7 @@ RUN  apt-get -y update && \
   python3.7 \
   python3.8 \
   rsync \
-  snmp \ 
+  snmp \
   snmp-mibs-downloader \
   snmpd \
   socat \
@@ -92,7 +92,7 @@ RUN  apt-get -y update && \
   tcptraceroute \
   telnet \
   traceroute \
-  tshark \ 
+  tshark \
   unzip \
   wget \
   vim \
@@ -112,7 +112,7 @@ RUN pwsh  -Command Install-Module -Name VMware.PowerCLI -Scope AllUsers -Force -
 
 
 # Install Oh-My-ZSH
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true  
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 # Install Packer
 RUN wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
@@ -130,25 +130,25 @@ RUN pip3 install -q ansible==$ANSIBLE_VERSION
 RUN pip3 install -r requirements.txt
 RUN pip3 install pyATS[library]
 
-# Add user nmichel
-RUN useradd -ms /bin/zsh nmichel
-RUN usermod -a -G sudo,nmichel nmichel
+# Add user danield
+RUN useradd -ms /bin/zsh danield
+RUN usermod -a -G sudo,danield danield
 
-# Copy Oh-My_ZSH Setting 
-COPY .zshrc /home/nmichel/.zshrc
-ADD .oh-my-zsh /home/nmichel/.oh-my-zsh
-RUN  chown -R nmichel:nmichel /home/nmichel
+# Copy Oh-My_ZSH Setting
+COPY .zshrc /home/danield/.zshrc
+ADD .oh-my-zsh /home/danield/.oh-my-zsh
+RUN  chown -R danield:danield /home/danield
 #RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
 #RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
 # Install OVF Tools
-COPY system/ovftools/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle /home/nmichel/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle
-RUN /bin/bash /home/nmichel/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle --eulas-agreed --required --console
+COPY system/ovftools/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle /home/danield/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle
+RUN /bin/bash /home/danield/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle --eulas-agreed --required --console
 
 # Cleanup
 RUN apt-get clean && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN rm -rf requirements.txt 
+RUN rm -rf requirements.txt
 RUN rm packer_${PACKER_VERSION}_linux_amd64.zip
 RUN rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN rm VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle

@@ -1,4 +1,4 @@
-# vPackets Tools 
+# vPackets Tools
 
 Gathered some code here and there on the web to create a single container that would allow me to have my own dev and tools environment no matter the platform I am working on.
 
@@ -39,7 +39,7 @@ It consists of the following:
 ### Devops Container
 
 This container will use the customized Dockerfile to build the first container. it has a policy to always restart itself in case of failure.
-We will map the laptop folder of /Users/nmichel/code/ to the container folder of /home/nmichel/devops/code/ so that all the code I edit on my laptop using visual studio is accessible by the container so we can run/test/delete it.
+We will map the laptop folder of /Users/danield/code/ to the container folder of /home/danield/devops/code/ so that all the code I edit on my laptop using visual studio is accessible by the container so we can run/test/delete it.
 
 An interactive shell using zsh is configured in this container so we can access it using the docker exec command
 
@@ -47,7 +47,7 @@ An interactive shell using zsh is configured in this container so we can access 
 
 Official docker container from nginx https://hub.docker.com/_/nginx
 Port redirection : 8080 to 80.
-Volume mapped: /Users/nmichel/code/DOCKER - Tools/www to /usr/share/nginx/html
+Volume mapped: /Users/danield/code/DOCKER - Tools/www to /usr/share/nginx/html
 
 An interactive shell is configured in this container so we can access it using the docker exec command
 
@@ -79,7 +79,7 @@ docker-compose up --build
 The 3 containers will be build and ready to be used.
 
 ```sh
-docker exec -it --user nic docker-tools_devops_1 /bin/zsh
+docker exec -it --user danield docker-tools_devops_1 /bin/zsh
 ```
 
 ## DevOps Container Only
@@ -94,7 +94,7 @@ docker build -t vpackets/tools:6.0.7 .
 Run the container - on Ubuntu
 
 ```
-docker run -dit --name vpackets-tools -h vpackets-container -v /iso:/iso -v /home/nmichel/code:/home/nmichel/code -v /home/nmichel/code/docker-tools/Ansible/Ansible_variables:/home/nmichel/ansible vpackets/tools:latest 
+docker run -dit --name vpackets-tools -h vpackets-container -v /iso:/iso -v /home/danield/code:/home/danield/code -v /home/danield/code/docker-tools/Ansible/Ansible_variables:/home/danield/ansible vpackets/tools:latest
 
 ```
 
@@ -104,9 +104,9 @@ Run the container - on MAC (updated for MBPro Work)
 ```
 docker run -dit --name vpackets-tools \
         -h vpackets-container \
-        -v /Users/nmichel/lab-images:/home/nmichel/lab-images \
-        -v /Users/nmichel/Code/:/home/nmichel/code \
-        -v "/Users/nmichel/Code/DOCKER-Tools/Ansible/Ansible_variables":/home/nmichel/ansible \
+        -v /Volumes/WD4TB/ISOs/:/home/danield/lab-images \
+        -v /Users/danield/git_projects/:/home/danield/code \
+        -v "/Users/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables":/home/danield/ansible \
         vpackets/tools:latest
 
 ```
@@ -114,7 +114,7 @@ docker run -dit --name vpackets-tools \
 Access the container (of course, change the user/folder in your Dockerfile):
 
 ```sh
- docker exec -it --user nmichel vpackets-tools /bin/zsh
+ docker exec -it --user danield vpackets-tools /bin/zsh
 ```
 
 
@@ -131,5 +131,6 @@ docker-compose down
 ## DevOps Container Only
 
 ```sh
-docker stop vpackets-tools
+
+
 ```
