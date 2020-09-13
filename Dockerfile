@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL Maintainer = "Nicolas MICHEL <nicolas@vpackets.net>"
+LABEL Maintainer = "danderemiah@gmail.com"
 
 # Variable Definition
 ENV ANSIBLE_VERSION "2.9.11"
@@ -27,9 +27,13 @@ COPY system/99fixbadproxy /etc/apt/apt.conf.d/99fixbadproxy
 RUN rm /var/lib/apt/lists/* -vf
 
 #install and source ansible
-RUN  apt-get -y update && \
- apt-get -y dist-upgrade && \
- apt-get -y --force-yes install \
+RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e "s#archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e "s#security.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e '/deb-src/d' /etc/apt/sources.list && \
+  apt-get -y update && \
+  apt-get -y dist-upgrade && \
+  apt-get -y --force-yes install \
   apt-utils \
   build-essential \
   ca-certificates \
