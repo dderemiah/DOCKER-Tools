@@ -1,2 +1,2 @@
 #!/bin/zsh
-docker exec -it --user danield vpackets-tools2 /bin/zsh
+docker exec -it --user danield devops_tools /bin/zsh
