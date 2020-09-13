@@ -7,8 +7,8 @@ services:
    tty: true
    restart: always
    volumes:
-    - /Users/danield/git_projects:/home/danield/code/
-    - /Users/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables:/home/danield/ansible
+    - /home/danield/git_projects:/home/danield/code/
+    - /home/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables:/home/danield/ansible
    hostname: vpackets-tools
   #
   # nginx:
