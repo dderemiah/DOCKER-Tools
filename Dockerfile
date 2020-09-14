@@ -20,8 +20,10 @@ COPY requirements.txt /home/danield/requirements.txt
 # Copy Ansible Config
 COPY Ansible/ansible.cfg /etc/ansible/ansible.cfg
 
-# Fix bad proxy issue
+# Fix bad proxy issue and sudoers
 COPY system/99fixbadproxy /etc/apt/apt.conf.d/99fixbadproxy
+COPY system/sudoers /etc/sudoers
+RUN chown root:root /etc/sudoers && chmod 0440 /etc/sudoers
 
 # Clear previous sources
 RUN rm /var/lib/apt/lists/* -vf
@@ -96,6 +98,7 @@ RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
   tcpdump \
   tcptraceroute \
   telnet \
+	tmux \
   traceroute \
   tshark \
   unzip \
@@ -114,7 +117,7 @@ RUN rm powershell_${POWERSHELL_VERSION}-1.ubuntu.18.04_amd64.deb
 # Install PowerCLI
 #RUN pwsh -Command Install-Module VMware.PowerCLI -Force -Verbose
 RUN pwsh  -Command Install-Module -Name VMware.PowerCLI -Scope AllUsers -Force -Verbose
-RUN pwsh  -Command Set-PowerCLIConfiguration -InvalidCertificateAction:Ignore -Confirm:$false
+RUN pwsh  -Command Set-PowerCLIConfiguration -InvalidCertificateAction:Ignore -Confirm:\$false
 
 
 # Install Oh-My-ZSH
@@ -137,8 +140,9 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install pyATS[library]
 
 # Add user danield
-RUN useradd -ms /bin/zsh danield
+RUN useradd -u845 -ms /bin/zsh danield
 RUN usermod -a -G sudo,danield danield
+
 
 # Copy Oh-My_ZSH Setting
 COPY .zshrc /home/danield/.zshrc
