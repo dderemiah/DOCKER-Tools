@@ -48,6 +48,7 @@ RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
   # need to expose Port
   iperf \
   iperf3 \
+	ipmitool \
   iproute2 \
   iputils-arping \
   iputils-clockdiff \
