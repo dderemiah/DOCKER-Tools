@@ -94,7 +94,11 @@ docker build -t vpackets/tools:6.0.7 .
 Run the container - on Ubuntu
 
 ```
-docker run -dit --name vpackets-tools -h vpackets-container -v /iso:/iso -v /home/danield/code:/home/danield/code -v /home/danield/code/docker-tools/Ansible/Ansible_variables:/home/danield/ansible vpackets/tools:latest
+docker run -dit --name vpackets-tools -h vpackets-container \
+-v /disk1/ISOS/:/home/nmichel/lab-images \
+-v /home/danield/git_projects/:/home/nmichel/code \
+-v /home/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables:/home/nmichel/ansible \
+vpackets/tools:latest
 
 ```
 
@@ -114,7 +118,7 @@ docker run -dit --name vpackets-tools \
 Access the container (of course, change the user/folder in your Dockerfile):
 
 ```sh
- docker exec -it --user danield vpackets-tools /bin/zsh
+ docker exec -it vpackets-tools /bin/zsh
 ```
 
 
