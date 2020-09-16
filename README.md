@@ -108,9 +108,9 @@ Run the container - on MAC (updated for MBPro Work)
 ```
 docker run -dit --name vpackets-tools \
         -h vpackets-container \
-        -v /Volumes/WD4TB/ISOs/:/home/danield/lab-images \
-        -v /Users/danield/git_projects/:/home/danield/code \
-        -v "/Users/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables":/home/danield/ansible \
+        -v /Volumes/WD4TB/ISOs/:/home/nmichel/lab-images \
+        -v /Users/danield/git_projects/:/home/nmichel/code \
+        -v "/Users/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables":/home/nmichel/ansible \
         vpackets/tools:latest
 
 ```

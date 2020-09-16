@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL Maintainer = "Nicolas MICHEL <nicolas@vpackets.net>"
+LABEL Maintainer = "danderemiah@gmail.com"
 
 # Variable Definition
 ENV ANSIBLE_VERSION "2.9.11"
@@ -20,16 +20,22 @@ COPY requirements.txt /home/danield/requirements.txt
 # Copy Ansible Config
 COPY Ansible/ansible.cfg /etc/ansible/ansible.cfg
 
-# Fix bad proxy issue
+# Fix bad proxy issue and sudoers
 COPY system/99fixbadproxy /etc/apt/apt.conf.d/99fixbadproxy
+COPY system/sudoers /etc/sudoers
+RUN chown root:root /etc/sudoers && chmod 0440 /etc/sudoers
 
 # Clear previous sources
 RUN rm /var/lib/apt/lists/* -vf
 
 #install and source ansible
-RUN  apt-get -y update && \
- apt-get -y dist-upgrade && \
- apt-get -y --force-yes install \
+RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e "s#archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e "s#security.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+  -e '/deb-src/d' /etc/apt/sources.list && \
+  apt-get -y update && \
+  apt-get -y dist-upgrade && \
+  apt-get -y --force-yes install \
   apt-utils \
   build-essential \
   ca-certificates \
@@ -44,6 +50,7 @@ RUN  apt-get -y update && \
   # need to expose Port
   iperf \
   iperf3 \
+	ipmitool \
   iproute2 \
   iputils-arping \
   iputils-clockdiff \
@@ -91,6 +98,7 @@ RUN  apt-get -y update && \
   tcpdump \
   tcptraceroute \
   telnet \
+	tmux \
   traceroute \
   tshark \
   unzip \
@@ -109,6 +117,7 @@ RUN rm powershell_${POWERSHELL_VERSION}-1.ubuntu.18.04_amd64.deb
 # Install PowerCLI
 #RUN pwsh -Command Install-Module VMware.PowerCLI -Force -Verbose
 RUN pwsh  -Command Install-Module -Name VMware.PowerCLI -Scope AllUsers -Force -Verbose
+RUN pwsh  -Command Set-PowerCLIConfiguration -InvalidCertificateAction:Ignore -Confirm:\$false
 
 
 # Install Oh-My-ZSH
@@ -131,8 +140,9 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install pyATS[library]
 
 # Add user danield
-RUN useradd -ms /bin/zsh danield
+RUN useradd -u845 -ms /bin/zsh danield
 RUN usermod -a -G sudo,danield danield
+
 
 # Copy Oh-My_ZSH Setting
 COPY .zshrc /home/danield/.zshrc
