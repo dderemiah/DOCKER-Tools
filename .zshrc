@@ -66,7 +66,6 @@ plugins=(
   encode64
   git
   httpie
-  last-working-dir
   pep8
   pip
   python

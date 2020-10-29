@@ -4,8 +4,8 @@ LABEL Maintainer = "danderemiah@gmail.com"
 # Variable Definition
 ENV ANSIBLE_VERSION "2.9.11"
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PACKER_VERSION "1.6.1"
-ENV TERRAFORM_VERSION "0.12.29"
+ENV PACKER_VERSION "1.6.4"
+ENV TERRAFORM_VERSION "0.13.5"
 ENV POWERSHELL_VERSION "7.0.3"
 
 # Creating Home Directory
@@ -20,10 +20,8 @@ COPY requirements.txt /home/danield/requirements.txt
 # Copy Ansible Config
 COPY Ansible/ansible.cfg /etc/ansible/ansible.cfg
 
-# Fix bad proxy issue and sudoers
+# Fix bad proxy issue
 COPY system/99fixbadproxy /etc/apt/apt.conf.d/99fixbadproxy
-COPY system/sudoers /etc/sudoers
-RUN chown root:root /etc/sudoers && chmod 0440 /etc/sudoers
 
 # Clear previous sources
 RUN rm /var/lib/apt/lists/* -vf
@@ -35,7 +33,7 @@ RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
   -e '/deb-src/d' /etc/apt/sources.list && \
   apt-get -y update && \
   apt-get -y dist-upgrade && \
-  apt-get -y --force-yes install \
+  apt-get -y install \
   apt-utils \
   build-essential \
   ca-certificates \
@@ -142,7 +140,9 @@ RUN pip3 install pyATS[library]
 # Add user danield
 RUN useradd -u845 -ms /bin/zsh danield
 RUN usermod -a -G sudo,danield danield
-
+# add to sudoers
+COPY system/sudoers /etc/sudoers
+RUN chown root:root /etc/sudoers && chmod 0440 /etc/sudoers
 
 # Copy Oh-My_ZSH Setting
 COPY .zshrc /home/danield/.zshrc
