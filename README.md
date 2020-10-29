@@ -94,7 +94,7 @@ docker build -t vpackets/tools:6.0.7 .
 Run the container - on Ubuntu
 
 ```
-docker run -dit --name vpackets-tools -h vpackets-container \
+docker run -dit --name vpackets-tools2 -h vpackets-container \
 -v /disk1/ISOS/:/home/nmichel/lab-images \
 -v /home/danield/git_projects/:/home/nmichel/code \
 -v /home/danield/git_projects/DOCKER-Tools/Ansible/Ansible_variables:/home/nmichel/ansible \
