@@ -10,9 +10,7 @@ ENV POWERSHELL_VERSION "7.0.3"
 
 # Creating Home Directory
 WORKDIR /home/danield
-RUN mkdir -p /home/danield/ansible
-RUN mkdir -p /home/danield/code
-RUN mkdir -p /home/danield/lab-images
+RUN mkdir -p /home/danield/ansible /home/danield/code /home/danield/lab-images
 
 # Copy requirement file (PIP Libraries)
 COPY requirements.txt /home/danield/requirements.txt
@@ -26,12 +24,14 @@ COPY system/99fixbadproxy /etc/apt/apt.conf.d/99fixbadproxy
 # Clear previous sources
 RUN rm /var/lib/apt/lists/* -vf
 
-#install and source ansible
-RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
-  -e "s#archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
-  -e "s#security.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
-  -e '/deb-src/d' /etc/apt/sources.list && \
-  apt-get -y update && \
+# Local repos on site
+#RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+#  -e "s#archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+#  -e "s#security.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
+#  -e '/deb-src/d' /etc/apt/sources.list
+
+# install and source ansible
+RUN  apt-get -y update && \
   apt-get -y dist-upgrade && \
   apt-get -y install \
   apt-utils \
@@ -88,7 +88,6 @@ RUN  sed -i -e "s#us.archive.ubuntu.com#ala-mirror.wrs.com/mirror/ubuntu.com#" \
   socat \
   software-properties-common \
   speedtest-cli \
-  #sysctl \
   openssh-server \
   sshpass \
   supervisor \
