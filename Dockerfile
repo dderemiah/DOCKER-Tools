@@ -112,7 +112,8 @@ RUN dpkg -i powershell_${POWERSHELL_VERSION}-1.ubuntu.18.04_amd64.deb
 RUN rm powershell_${POWERSHELL_VERSION}-1.ubuntu.18.04_amd64.deb
 
 # Install PowerCLI
-RUN pwsh  -Command Install-Module -Name VMware.PowerCLI -Scope AllUsers -Force -Verbose
+RUN pwsh  -Command Install-Module -Name VMware.PowerCLI -Scope AllUsers -Force
+RUN pwsh  -Command Install-Module -Name DRSRule -Scope AllUsers -Force
 RUN pwsh  -Command Set-PowerCLIConfiguration -InvalidCertificateAction:Ignore -Confirm:\$false
 
 
