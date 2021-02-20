@@ -129,9 +129,9 @@ RUN pip3 install -q --upgrade pip
 RUN pip3 install --upgrade setuptools
 RUN pip3 install -q ansible==$ANSIBLE_VERSION
 # Copy requirement file (PIP Libraries)
-# COPY requirements.txt /home/danield/requirements.txt
-# RUN pip3 install -r requirements.txt
-# RUN pip3 install pyATS[library]
+COPY requirements.txt /home/danield/requirements.txt
+RUN pip3 install -r requirements.txt
+RUN pip3 install pyATS[library]
 
 # Add user danield
 RUN useradd -u845 -ms /bin/zsh danield
