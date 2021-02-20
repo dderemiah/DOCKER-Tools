@@ -2,18 +2,15 @@ FROM ubuntu:18.04
 LABEL Maintainer = "danderemiah@gmail.com"
 
 # Variable Definition
-ENV ANSIBLE_VERSION "2.9.11"
+ENV ANSIBLE_VERSION "2.10.3"
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PACKER_VERSION "1.6.4"
-ENV TERRAFORM_VERSION "0.13.5"
-ENV POWERSHELL_VERSION "7.0.3"
+ENV PACKER_VERSION "1.6.5"
+ENV TERRAFORM_VERSION "0.14.0"
+ENV POWERSHELL_VERSION "7.1.0"
 
 # Creating Home Directory
 WORKDIR /home/danield
 RUN mkdir -p /home/danield/ansible /home/danield/code /home/danield/lab-images
-
-# Copy requirement file (PIP Libraries)
-COPY requirements.txt /home/danield/requirements.txt
 
 # Copy Ansible Config
 COPY Ansible/ansible.cfg /etc/ansible/ansible.cfg
@@ -32,7 +29,6 @@ RUN rm /var/lib/apt/lists/* -vf
 
 # install and source ansible
 RUN  apt-get -y update && \
-  apt-get -y dist-upgrade && \
   apt-get -y install \
   apt-utils \
   build-essential \
@@ -59,7 +55,7 @@ RUN  apt-get -y update && \
   man \
   mtr \
   mysql-client \
-  mysql-server \
+  # mysql-server \
   nano \
   net-tools \
   #net-snmp \
@@ -88,7 +84,6 @@ RUN  apt-get -y update && \
   socat \
   software-properties-common \
   speedtest-cli \
-  openssh-server \
   sshpass \
   supervisor \
   sudo \
@@ -97,12 +92,12 @@ RUN  apt-get -y update && \
   telnet \
 	tmux \
   traceroute \
+  tree \
   tshark \
   unzip \
   wget \
   vim \
   wget \
-  tree \
   zsh \
   zsh-syntax-highlighting
 
@@ -121,20 +116,22 @@ RUN pwsh  -Command Set-PowerCLIConfiguration -InvalidCertificateAction:Ignore -C
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 # Install Packer
-RUN wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
-RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip
-RUN mv packer /usr/local/bin
+# RUN wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+# RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip
+# RUN mv packer /usr/local/bin
 
 # Install Terraform
-RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/
+# RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+# RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/
 
 # Install Pip requirements
 RUN pip3 install -q --upgrade pip
 RUN pip3 install --upgrade setuptools
 RUN pip3 install -q ansible==$ANSIBLE_VERSION
-RUN pip3 install -r requirements.txt
-RUN pip3 install pyATS[library]
+# Copy requirement file (PIP Libraries)
+# COPY requirements.txt /home/danield/requirements.txt
+# RUN pip3 install -r requirements.txt
+# RUN pip3 install pyATS[library]
 
 # Add user danield
 RUN useradd -u845 -ms /bin/zsh danield
@@ -153,11 +150,12 @@ RUN  chown -R danield:danield /home/danield
 # Install OVF Tools
 COPY system/ovftools/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle /home/danield/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle
 RUN /bin/bash /home/danield/VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle --eulas-agreed --required --console
+  # RUN apt-get -y dist-upgrade
 
 # Cleanup
-RUN apt-get clean && \
- rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# RUN apt-get clean && \
+#  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN rm -rf requirements.txt
-RUN rm packer_${PACKER_VERSION}_linux_amd64.zip
-RUN rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+# RUN rm packer_${PACKER_VERSION}_linux_amd64.zip
+# RUN rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN rm VMware-ovftool-4.4.0-16360108-lin.x86_64.bundle
