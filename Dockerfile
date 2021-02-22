@@ -140,6 +140,9 @@ RUN usermod -a -G sudo,danield danield
 COPY system/sudoers /etc/sudoers
 RUN chown root:root /etc/sudoers && chmod 0440 /etc/sudoers
 
+# tmux settings
+COPY system/tmux.conf /home/danield/.tmux.conf
+
 # Copy Oh-My_ZSH Setting
 COPY .zshrc /home/danield/.zshrc
 ADD .oh-my-zsh /home/danield/.oh-my-zsh
